@@ -27,7 +27,7 @@ package native
 
 import "unsafe"
 
-// Take the first 8 bigendian bytes of a buffer and return them.
+// Take the first 8 native endian bytes of a buffer and return them.
 func U64(b []byte) uint64 {
 	if len(b) < 8 {
 		panic("U64: too short buffer")
@@ -35,7 +35,7 @@ func U64(b []byte) uint64 {
 	return *(*uint64)(unsafe.Pointer(&b[0]))
 }
 
-// Poke 8 bigendian bytes into the buffer.
+// Poke 8 native endian bytes into the buffer.
 func PutU64(b []byte, v uint64) {
 	if len(b) < 8 {
 		panic("PutU64: too short buffer")
@@ -43,7 +43,7 @@ func PutU64(b []byte, v uint64) {
 	*(*uint64)(unsafe.Pointer(&b[0])) = v
 }
 
-// Take the first 4 bigendian bytes of a buffer and return them.
+// Take the first 4 native endian bytes of a buffer and return them.
 func U32(b []byte) uint32 {
 	if len(b) < 4 {
 		panic("U32: too short buffer")
@@ -51,7 +51,7 @@ func U32(b []byte) uint32 {
 	return *(*uint32)(unsafe.Pointer(&b[0]))
 }
 
-// Poke 4 bigendian bytes into the buffer.
+// Poke 4 native endian bytes into the buffer.
 func PutU32(b []byte, v uint32) {
 	if len(b) < 4 {
 		panic("PutU32: too short buffer")
@@ -59,7 +59,7 @@ func PutU32(b []byte, v uint32) {
 	*(*uint32)(unsafe.Pointer(&b[0])) = v
 }
 
-// Take the first 2 bigendian bytes of a buffer and return them.
+// Take the first 2 native endian bytes of a buffer and return them.
 func U16(b []byte) uint16 {
 	if len(b) < 2 {
 		panic("U16: too short buffer")
@@ -67,7 +67,7 @@ func U16(b []byte) uint16 {
 	return *(*uint16)(unsafe.Pointer(&b[0]))
 }
 
-// Poke 2 bigendian bytes into the buffer.
+// Poke 2 native endian bytes into the buffer.
 func PutU16(b []byte, v uint16) {
 	if len(b) < 2 {
 		panic("PutU16: too short buffer")

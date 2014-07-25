@@ -23,19 +23,19 @@ func (p *Printer) Byte(d byte) *Printer {
 	return p
 }
 
-// Output 2 bigendian bytes.
+// Output 2 native endian bytes.
 func (p *Printer) U16(d uint16) *Printer {
 	p.W = append(p.W, byte(d), byte(d>>8))
 	return p
 }
 
-// Output 4 bigendian bytes.
+// Output 4 native endian bytes.
 func (p *Printer) U32(d uint32) *Printer {
 	p.W = append(p.W, byte(d), byte(d>>8), byte(d>>16), byte(d>>24))
 	return p
 }
 
-// Output 4 bigendian bytes.
+// Output 4 native endian bytes.
 func (p *Printer) U64(d uint64) *Printer {
 	p.W = append(p.W, byte(d), byte(d>>8), byte(d>>16), byte(d>>24), byte(d>>32), byte(d>>40), byte(d>>48), byte(d>>56))
 	return p
@@ -74,17 +74,17 @@ func (p *Printer) String(d string) *Printer {
 	return p
 }
 
-// Output a string with a 4 byte bigendian length prefix and no trailing null.
+// Output a string with a 4 byte native endian length prefix and no trailing null.
 func (p *Printer) U32String(d string) *Printer {
 	return p.U32(uint32(len(d))).String(d)
 }
 
-// Output bytes with a 4 byte bigendian length prefix and no trailing null.
+// Output bytes with a 4 byte native endian length prefix and no trailing null.
 func (p *Printer) U32Bytes(d []byte) *Printer {
 	return p.U32(uint32(len(d))).Bytes(d)
 }
 
-// Output a string with a 2 byte bigendian length prefix and no trailing null.
+// Output a string with a 2 byte native endian length prefix and no trailing null.
 func (p *Printer) U16String(d string) *Printer {
 	if len(d) > 0xffff {
 		panic("binprinter: string too long")
@@ -92,7 +92,7 @@ func (p *Printer) U16String(d string) *Printer {
 	return p.U16(uint16(len(d))).String(d)
 }
 
-// Output a string with a 1 byte bigendian length prefix and no trailing null.
+// Output a string with a 1 byte native endian length prefix and no trailing null.
 func (p *Printer) U8String(d string) *Printer {
 	if len(d) > 0xff {
 		panic("binprinter: string too long")
