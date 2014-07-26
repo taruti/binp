@@ -4,7 +4,7 @@ It is particularly suitable for parsing irregular data structures provided by e.
 
 For instance printing:
 
-	p := native.NewPrinter().Byte(1).Bytes(rand(20))
+	p := native.Out().Byte(1).Bytes(rand(20))
 	p.U32String("foo").U32String("bar")
 	p.Byte(0).U32(0)
 	return p.Out()

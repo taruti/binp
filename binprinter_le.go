@@ -8,17 +8,17 @@ type Printer struct {
 }
 
 // Create a new printer with empty output.
-func NewPrinter() *Printer {
+func Out() *Printer {
 	return &Printer{[]byte{}}
 }
 
 // Create a new printer with output prefixed with the given byte slice.
-func NewPrinterWith(b []byte) *Printer {
+func OutWith(b []byte) *Printer {
 	return &Printer{b}
 }
 
 // Create a new printer with an empty slice with the capacity given below.
-func NewPrinterCap(initialcap int) *Printer {
+func OutCap(initialcap int) *Printer {
 	return &Printer{make([]byte, 0, initialcap)}
 }
 
