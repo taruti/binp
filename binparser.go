@@ -12,6 +12,7 @@ type Parser struct {
 	Off int
 }
 
+// Catch a panic into an error.
 func Catch(f func()) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -76,12 +77,19 @@ func (p *Parser) U32Bytes(d *[]byte) *Parser {
 	return p.U32(&v).NBytes(int(v), d)
 }
 
+// Ensure the input is aligned possibly skipping bytes.
 func (p *Parser) Align(n int) *Parser {
 	r := p.Off % n
 	if r == 0 {
 		return p
 	}
 	p.Off += n - r
+	return p
+}
+
+// Skip bytes.
+func (p *Parser) Skip(n int) *Parser {
+	p.Off += n
 	return p
 }
 

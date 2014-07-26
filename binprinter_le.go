@@ -62,6 +62,20 @@ func (p *Printer) Align(n int) *Printer {
 	return p
 }
 
+// Skip (zero-fill) some bytes.
+func (p *Printer) Skip(n int) *Printer {
+	for n > 0 {
+		cur := n
+		if cur > 16 {
+			cur = 16
+		}
+		p.W = append(p.W, z16[:cur]...)
+		n -= cur
+	}
+
+	return p
+}
+
 // Output a raw byte slice with no length prefix.
 func (p *Printer) Bytes(d []byte) *Printer {
 	p.W = append(p.W, d...)
