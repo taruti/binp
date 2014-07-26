@@ -17,6 +17,11 @@ func NewPrinterWith(b []byte) *Printer {
 	return &Printer{b}
 }
 
+// Create a new printer with an empty slice with the capacity given below.
+func NewPrinterCap(initialcap int) *Printer {
+	return &Printer{make([]byte, 0, initialcap)}
+}
+
 // Output a byte.
 func (p *Printer) Byte(d byte) *Printer {
 	p.W = append(p.W, d)
