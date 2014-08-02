@@ -4,7 +4,7 @@ package native
 
 // Printer type. Don't touch the internals.
 type Printer struct {
-	W []byte
+	w []byte
 }
 
 // Create a new printer with empty output.
@@ -13,7 +13,7 @@ func Out() *Printer {
 }
 
 // Create a new printer with output prefixed with the given byte slice.
-func OutWith(b []byte) *Printer {
+func Outwith(b []byte) *Printer {
 	return &Printer{b}
 }
 
@@ -24,25 +24,25 @@ func OutCap(initialcap int) *Printer {
 
 // Output a byte.
 func (p *Printer) Byte(d byte) *Printer {
-	p.W = append(p.W, d)
+	p.w = append(p.w, d)
 	return p
 }
 
 // Output 2 native endian bytes.
 func (p *Printer) U16(d uint16) *Printer {
-	p.W = append(p.W, byte(d), byte(d>>8))
+	p.w = append(p.w, byte(d), byte(d>>8))
 	return p
 }
 
 // Output 4 native endian bytes.
 func (p *Printer) U32(d uint32) *Printer {
-	p.W = append(p.W, byte(d), byte(d>>8), byte(d>>16), byte(d>>24))
+	p.w = append(p.w, byte(d), byte(d>>8), byte(d>>16), byte(d>>24))
 	return p
 }
 
 // Output 4 native endian bytes.
 func (p *Printer) U64(d uint64) *Printer {
-	p.W = append(p.W, byte(d), byte(d>>8), byte(d>>16), byte(d>>24), byte(d>>32), byte(d>>40), byte(d>>48), byte(d>>56))
+	p.w = append(p.w, byte(d), byte(d>>8), byte(d>>16), byte(d>>24), byte(d>>32), byte(d>>40), byte(d>>48), byte(d>>56))
 	return p
 }
 
@@ -50,7 +50,7 @@ var z16 = make([]byte, 16)
 
 // Align to boundary
 func (p *Printer) Align(n int) *Printer {
-	r := len(p.W) % n
+	r := len(p.w) % n
 	if r == 0 {
 		return p
 	}
@@ -60,7 +60,7 @@ func (p *Printer) Align(n int) *Printer {
 		if cur > 16 {
 			cur = 16
 		}
-		p.W = append(p.W, z16[:cur]...)
+		p.w = append(p.w, z16[:cur]...)
 		r -= cur
 	}
 
@@ -74,7 +74,7 @@ func (p *Printer) Skip(n int) *Printer {
 		if cur > 16 {
 			cur = 16
 		}
-		p.W = append(p.W, z16[:cur]...)
+		p.w = append(p.w, z16[:cur]...)
 		n -= cur
 	}
 
@@ -83,13 +83,13 @@ func (p *Printer) Skip(n int) *Printer {
 
 // Output a raw byte slice with no length prefix.
 func (p *Printer) Bytes(d []byte) *Printer {
-	p.W = append(p.W, d...)
+	p.w = append(p.w, d...)
 	return p
 }
 
 // Output a raw string with no length prefix.
 func (p *Printer) String(d string) *Printer {
-	p.W = append(p.W, []byte(d)...)
+	p.w = append(p.w, []byte(d)...)
 	return p
 }
 
@@ -126,5 +126,5 @@ func (p *Printer) String0(d string) *Printer {
 
 // Get the output as a byte slice.
 func (p *Printer) Out() []byte {
-	return p.W
+	return p.w
 }
