@@ -128,3 +128,38 @@ func (p *Printer) String0(d string) *Printer {
 func (p *Printer) Out() []byte {
 	return p.w
 }
+
+// Start counting bytes for the length field in question.
+func (p *Printer) LenStart(l *Len) *Printer {
+	l.start = len(p.w)
+	return p
+}
+
+// Add a 16 bit field at the current location that will be filled with the length.
+func (p *Printer) LenU16(l *Len) *Printer {
+	l.ls = append(l.ls, ls{uint32(len(p.w)), 2})
+	return p.U16(0)
+}
+
+// Fill fields associated with this length with the current offset.
+func (p *Printer) LenDone(l *Len) *Printer {
+	plen := len(p.w) - l.start
+	for _, ls := range l.ls {
+		switch ls.size {
+		case 2:
+			PutU16(p.w[ls.offset:], uint16(plen))
+		}
+	}
+	return p
+}
+
+// Type for handling length fields.
+type Len struct {
+	ls    []ls
+	start int
+}
+
+type ls struct {
+	offset uint32
+	size   uint32
+}

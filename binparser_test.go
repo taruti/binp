@@ -21,3 +21,12 @@ func TestParser(t *testing.T) {
 		t.Fatal("Print->Parse->Equal failed for vs")
 	}
 }
+
+func TestLen(t *testing.T) {
+	var l1, l2 Len
+	bs := Out().LenU16(&l1).Byte(0x11).LenStart(&l1).Byte(0x22).Byte(0x33).LenStart(&l2).Byte(0x44).LenU16(&l2).LenU16(&l2).LenDone(&l1).LenDone(&l2).Out()
+	//                 0700        11                       22         33                       44         0500        0500
+	if string(bs) != "\x07\x00\x11\x22\x33\x44\x05\x00\x05\x00" {
+		t.Fatal("TestLen unexpected result")
+	}
+}
