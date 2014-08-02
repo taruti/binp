@@ -141,6 +141,14 @@ func (p *Printer) LenU16(l *Len) *Printer {
 	return p.U16(0)
 }
 
+// Call LenDone for all the arguments
+func (p *Printer) LensDone(ls ...*Len) *Printer {
+	for _, l := range ls {
+		p.LenDone(l)
+	}
+	return p
+}
+
 // Fill fields associated with this length with the current offset.
 func (p *Printer) LenDone(l *Len) *Printer {
 	plen := len(p.w) - l.start
