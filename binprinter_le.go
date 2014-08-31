@@ -142,7 +142,7 @@ func (p *Printer) LenU16(l *Len) *Printer {
 }
 
 // Add a 32 bit field at the current location that will be filled with the length.
-func (p *Printer) LenU16(l *Len) *Printer {
+func (p *Printer) LenU32(l *Len) *Printer {
 	l.ls = append(l.ls, ls{uint32(len(p.w)), 4})
 	return p.U16(0)
 }
