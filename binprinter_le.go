@@ -141,6 +141,12 @@ func (p *Printer) LenU16(l *Len) *Printer {
 	return p.U16(0)
 }
 
+// Add a 32 bit field at the current location that will be filled with the length.
+func (p *Printer) LenU16(l *Len) *Printer {
+	l.ls = append(l.ls, ls{uint32(len(p.w)), 4})
+	return p.U16(0)
+}
+
 // Call LenDone for all the arguments
 func (p *Printer) LensDone(ls ...*Len) *Printer {
 	for _, l := range ls {
@@ -156,6 +162,8 @@ func (p *Printer) LenDone(l *Len) *Printer {
 		switch ls.size {
 		case 2:
 			PutU16(p.w[ls.offset:], uint16(plen))
+		case 4:
+			PutU32(p.w[ls.offset:], uint32(plen))
 		}
 	}
 	return p
