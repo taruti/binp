@@ -1,4 +1,4 @@
-package bigendian
+package binp
 
 import (
 	"unsafe"

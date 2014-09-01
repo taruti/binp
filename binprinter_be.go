@@ -1,4 +1,4 @@
-package bigendian
+package binp
 
 // Printer type. Don't touch the internals.
 type Printer struct {
