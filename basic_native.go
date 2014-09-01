@@ -23,7 +23,7 @@ And parsing
 	p.Byte(&follows).U32(&reserved).End()
 
 */
-package native
+package binp
 
 import "unsafe"
 

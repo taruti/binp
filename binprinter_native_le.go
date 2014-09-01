@@ -1,6 +1,6 @@
 // +build 386 amd64 arm
 
-package native
+package binp
 
 // Printer type. Don't touch the internals.
 type Printer struct {
