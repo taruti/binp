@@ -13,7 +13,7 @@ func Out() *Printer {
 }
 
 // Create a new printer with output prefixed with the given byte slice.
-func Outwith(b []byte) *Printer {
+func OutWith(b []byte) *Printer {
 	return &Printer{b}
 }
 
@@ -24,6 +24,18 @@ func OutCap(initialcap int) *Printer {
 
 // Output a byte.
 func (p *Printer) Byte(d byte) *Printer {
+	p.w = append(p.w, d)
+	return p
+}
+
+// Output a byte, synonym for .Byte.
+func (p *Printer) B8(d byte) *Printer {
+	p.w = append(p.w, d)
+	return p
+}
+
+// Output a byte, synonym for .Byte.
+func (p *Printer) N8(d byte) *Printer {
 	p.w = append(p.w, d)
 	return p
 }

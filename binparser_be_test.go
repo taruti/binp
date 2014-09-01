@@ -2,7 +2,7 @@ package binp
 
 import "testing"
 
-func TestParser(t *testing.T) {
+func TestParserBE(t *testing.T) {
 	if ntohs(0x1234) != 0x3412 {
 		t.Fatal("ntohs")
 	}
@@ -41,7 +41,8 @@ func TestParser(t *testing.T) {
 func TestEndToEnd(t *testing.T) {
 	v := uint64(0x1122334455667788)
 	var w uint64
-	NewParser(NewPrinter().B64(v).Out()).B64(&w).End()
-	if v!=w { t.Fatal("E2E: B64") }
+	NewParser(Out().B64(v).Out()).B64(&w).End()
+	if v != w {
+		t.Fatal("E2E: B64")
+	}
 }
-

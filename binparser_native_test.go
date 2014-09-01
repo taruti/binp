@@ -10,7 +10,7 @@ type vs struct {
 	s   string
 }
 
-func TestParser(t *testing.T) {
+func TestParserNative(t *testing.T) {
 	v := vs{0x8877665544332211, 0x01234567, 0xFEDC, 42, "fofof"}
 	bs := Out().N64(v.v64).N32(v.v32).N16(v.v16).Byte(v.v8).Align(4).N32String(v.s).Out()
 	var r vs

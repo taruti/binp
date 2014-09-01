@@ -9,22 +9,22 @@ func ntohs(uint16) uint16
 
 // Parse 4 bigendian bytes from the buffer.
 func (p *Parser) B32(d *uint32) *Parser {
-	*d = ntohl(*(*uint32)((unsafe.Pointer(&p.R[p.Off]))))
-	p.Off += 4
+	*d = ntohl(*(*uint32)((unsafe.Pointer(&p.r[p.off]))))
+	p.off += 4
 	return p
 }
 
 // Parse 8 bigendian bytes from the buffer.
 func (p *Parser) B64(d *uint64) *Parser {
-	*d = ntohq(*(*uint64)((unsafe.Pointer(&p.R[p.Off]))))
-	p.Off += 8
+	*d = ntohq(*(*uint64)((unsafe.Pointer(&p.r[p.off]))))
+	p.off += 8
 	return p
 }
 
 // Parse 2 bigendian bytes from the buffer.
 func (p *Parser) B16(d *uint16) *Parser {
-	*d = ntohs(*(*uint16)((unsafe.Pointer(&p.R[p.Off]))))
-	p.Off += 2
+	*d = ntohs(*(*uint16)((unsafe.Pointer(&p.r[p.off]))))
+	p.off += 2
 	return p
 }
 
