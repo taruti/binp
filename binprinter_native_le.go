@@ -29,19 +29,19 @@ func (p *Printer) Byte(d byte) *Printer {
 }
 
 // Output 2 native endian bytes.
-func (p *Printer) U16(d uint16) *Printer {
+func (p *Printer) N16(d uint16) *Printer {
 	p.w = append(p.w, byte(d), byte(d>>8))
 	return p
 }
 
 // Output 4 native endian bytes.
-func (p *Printer) U32(d uint32) *Printer {
+func (p *Printer) N32(d uint32) *Printer {
 	p.w = append(p.w, byte(d), byte(d>>8), byte(d>>16), byte(d>>24))
 	return p
 }
 
 // Output 4 native endian bytes.
-func (p *Printer) U64(d uint64) *Printer {
+func (p *Printer) N64(d uint64) *Printer {
 	p.w = append(p.w, byte(d), byte(d>>8), byte(d>>16), byte(d>>24), byte(d>>32), byte(d>>40), byte(d>>48), byte(d>>56))
 	return p
 }
@@ -94,25 +94,25 @@ func (p *Printer) String(d string) *Printer {
 }
 
 // Output a string with a 4 byte native endian length prefix and no trailing null.
-func (p *Printer) U32String(d string) *Printer {
-	return p.U32(uint32(len(d))).String(d)
+func (p *Printer) N32String(d string) *Printer {
+	return p.N32(uint32(len(d))).String(d)
 }
 
 // Output bytes with a 4 byte native endian length prefix and no trailing null.
-func (p *Printer) U32Bytes(d []byte) *Printer {
-	return p.U32(uint32(len(d))).Bytes(d)
+func (p *Printer) N32Bytes(d []byte) *Printer {
+	return p.N32(uint32(len(d))).Bytes(d)
 }
 
 // Output a string with a 2 byte native endian length prefix and no trailing null.
-func (p *Printer) U16String(d string) *Printer {
+func (p *Printer) N16String(d string) *Printer {
 	if len(d) > 0xffff {
 		panic("binprinter: string too long")
 	}
-	return p.U16(uint16(len(d))).String(d)
+	return p.N16(uint16(len(d))).String(d)
 }
 
 // Output a string with a 1 byte native endian length prefix and no trailing null.
-func (p *Printer) U8String(d string) *Printer {
+func (p *Printer) N8String(d string) *Printer {
 	if len(d) > 0xff {
 		panic("binprinter: string too long")
 	}
@@ -136,15 +136,15 @@ func (p *Printer) LenStart(l *Len) *Printer {
 }
 
 // Add a 16 bit field at the current location that will be filled with the length.
-func (p *Printer) LenU16(l *Len) *Printer {
+func (p *Printer) LenN16(l *Len) *Printer {
 	l.ls = append(l.ls, ls{uint32(len(p.w)), 2})
-	return p.U16(0)
+	return p.N16(0)
 }
 
 // Add a 32 bit field at the current location that will be filled with the length.
-func (p *Printer) LenU32(l *Len) *Printer {
+func (p *Printer) LenN32(l *Len) *Printer {
 	l.ls = append(l.ls, ls{uint32(len(p.w)), 4})
-	return p.U32(0)
+	return p.N32(0)
 }
 
 // Call LenDone for all the arguments
@@ -161,9 +161,9 @@ func (p *Printer) LenDone(l *Len) *Printer {
 	for _, ls := range l.ls {
 		switch ls.size {
 		case 2:
-			PutU16(p.w[ls.offset:], uint16(plen))
+			PutN16(p.w[ls.offset:], uint16(plen))
 		case 4:
-			PutU32(p.w[ls.offset:], uint32(plen))
+			PutN32(p.w[ls.offset:], uint32(plen))
 		}
 	}
 	return p

@@ -40,21 +40,21 @@ func (p *Parser) Byte(d *byte) *Parser {
 }
 
 // Parse 4 native endian bytes from the buffer.
-func (p *Parser) U32(d *uint32) *Parser {
+func (p *Parser) N32(d *uint32) *Parser {
 	*d = *(*uint32)((unsafe.Pointer(&p.R[p.Off])))
 	p.Off += 4
 	return p
 }
 
 // Parse 8 native endian bytes from the buffer.
-func (p *Parser) U64(d *uint64) *Parser {
+func (p *Parser) N64(d *uint64) *Parser {
 	*d = *(*uint64)((unsafe.Pointer(&p.R[p.Off])))
 	p.Off += 8
 	return p
 }
 
 // Parse 2 native endian bytes from the buffer.
-func (p *Parser) U16(d *uint16) *Parser {
+func (p *Parser) N16(d *uint16) *Parser {
 	*d = *(*uint16)((unsafe.Pointer(&p.R[p.Off])))
 	p.Off += 2
 	return p
@@ -72,9 +72,9 @@ func (p *Parser) NBytes(n int, d *[]byte) *Parser {
 }
 
 // Parse a string with a 4 byte native endian length prefix to a []byte pointer.
-func (p *Parser) U32Bytes(d *[]byte) *Parser {
+func (p *Parser) N32Bytes(d *[]byte) *Parser {
 	var v uint32
-	return p.U32(&v).NBytes(int(v), d)
+	return p.N32(&v).NBytes(int(v), d)
 }
 
 // Ensure the input is aligned possibly skipping bytes.
@@ -106,19 +106,19 @@ func (p *Parser) NString(n int, d *string) *Parser {
 }
 
 // Parse a string with a 4 byte native endian length prefix to a string pointer.
-func (p *Parser) U32String(d *string) *Parser {
+func (p *Parser) N32String(d *string) *Parser {
 	var v uint32
-	return p.U32(&v).NString(int(v), d)
+	return p.N32(&v).NString(int(v), d)
 }
 
 // Parse a string with a 2 byte native endian length prefix to a string pointer.
-func (p *Parser) U16String(d *string) *Parser {
+func (p *Parser) N16String(d *string) *Parser {
 	var v uint16
-	return p.U16(&v).NString(int(v), d)
+	return p.N16(&v).NString(int(v), d)
 }
 
 // Parse a string with a 1 byte length prefix to a string pointer.
-func (p *Parser) U8String(d *string) *Parser {
+func (p *Parser) N8String(d *string) *Parser {
 	var v uint8
 	return p.Byte(&v).NString(int(v), d)
 }
