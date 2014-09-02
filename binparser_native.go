@@ -74,13 +74,33 @@ func (p *Parser) N16(d *uint16) *Parser {
 	return p
 }
 
-// Parse n bytes from the buffer to a []byte pointer.
+// Parse n bytes from the buffer and copy to a []byte pointer that is allocated.
 func (p *Parser) NBytes(n int, d *[]byte) *Parser {
 	if n > len(p.r[p.off:]) {
 		panic("binparser: overflowing length")
 	}
 	*d = make([]byte, n)
 	copy(*d, p.r[p.off:])
+	p.off += n
+	return p
+}
+
+// Parse n bytes from the buffer and copy to the supplied []byte.
+func (p *Parser) NBytesCopy(n int, d []byte) *Parser {
+	if n > len(p.r[p.off:]) {
+		panic("binparser: overflowing length")
+	}
+	copy(d, p.r[p.off:p.off+n])
+	p.off += n
+	return p
+}
+
+// Parse n bytes from the buffer to a []byte pointer that refers to the parser internal buffer.
+func (p *Parser) NBytesPeek(n int, d *[]byte) *Parser {
+	if n > len(p.r[p.off:]) {
+		panic("binparser: overflowing length")
+	}
+	*d = p.r[p.off : p.off+n]
 	p.off += n
 	return p
 }
