@@ -4,8 +4,8 @@ import (
 	"unsafe"
 )
 
-func ntohl(uint32) uint32
-func ntohs(uint16) uint16
+func ntohl(arg uint32) uint32
+func ntohs(arg uint16) uint16
 
 // Parse 4 bigendian bytes from the buffer.
 func (p *Parser) B32(d *uint32) *Parser {
