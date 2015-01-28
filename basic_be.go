@@ -1,6 +1,9 @@
 package binp
 
-import "unsafe"
+import (
+	"math"
+	"unsafe"
+)
 
 func ntohq(x uint64) uint64 {
 	return ((uint64(ntohl(uint32((x) >> 32)))) | (uint64(ntohl(uint32(x))) << 32))
@@ -52,4 +55,24 @@ func PutB16(b []byte, v uint16) {
 		panic("PutB16: too short buffer")
 	}
 	*(*uint16)(unsafe.Pointer(&b[0])) = ntohs(v)
+}
+
+// PutBF32 pokes a float32.
+func PutBF32(b []byte, v float32) {
+	PutB32(b, math.Float32bits(v))
+}
+
+// BF32 peeks a float32
+func BF32(b []byte) float32 {
+	return math.Float32frombits(B32(b))
+}
+
+// PutBF64 pokes a float64.
+func PutBF64(b []byte, v float64) {
+	PutB64(b, math.Float64bits(v))
+}
+
+// BF64 peeks a float64
+func BF64(b []byte) float64 {
+	return math.Float64frombits(B64(b))
 }
