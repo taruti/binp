@@ -133,6 +133,7 @@ func (p *Parser) NString(n int, d *string) *Parser {
 	}
 	bs := p.r[p.off : p.off+n]
 	*d = string(bs)
+	p.off += n
 	return p
 }
 
