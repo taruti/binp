@@ -3,7 +3,6 @@ package binp
 import (
 	"errors"
 	"fmt"
-	"unsafe"
 )
 
 // Parser type. Don't touch the internals.
@@ -55,21 +54,21 @@ func (p *Parser) N8(d *byte) *Parser {
 
 // Parse 4 native endian bytes from the buffer.
 func (p *Parser) N32(d *uint32) *Parser {
-	*d = *(*uint32)((unsafe.Pointer(&p.r[p.off])))
+	*d = NativeEndian.Uint32(p.r[p.off:])
 	p.off += 4
 	return p
 }
 
 // Parse 8 native endian bytes from the buffer.
 func (p *Parser) N64(d *uint64) *Parser {
-	*d = *(*uint64)((unsafe.Pointer(&p.r[p.off])))
+	*d = NativeEndian.Uint64(p.r[p.off:])
 	p.off += 8
 	return p
 }
 
 // Parse 2 native endian bytes from the buffer.
 func (p *Parser) N16(d *uint16) *Parser {
-	*d = *(*uint16)((unsafe.Pointer(&p.r[p.off])))
+	*d = NativeEndian.Uint16(p.r[p.off:])
 	p.off += 2
 	return p
 }
@@ -132,10 +131,8 @@ func (p *Parser) NString(n int, d *string) *Parser {
 	if n > len(p.r[p.off:]) {
 		panic("binparser: overflowing length")
 	}
-	b := make([]byte, n)
-	copy(b, p.r[p.off:])
-	p.off += n
-	*(*string)(d) = *(*string)(unsafe.Pointer(&b))
+	bs := p.r[p.off : p.off+n]
+	*d = string(bs)
 	return p
 }
 
