@@ -173,9 +173,9 @@ func (p *Printer) LenDone(l *Len) *Printer {
 	for _, ls := range l.ls {
 		switch ls.size {
 		case 2:
-			PutN16(p.w[ls.offset:], uint16(plen))
+			NativeEndian.PutUint16(p.w[ls.offset:], uint16(plen))
 		case 4:
-			PutN32(p.w[ls.offset:], uint32(plen))
+			NativeEndian.PutUint32(p.w[ls.offset:], uint32(plen))
 		}
 	}
 	return p

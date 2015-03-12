@@ -51,3 +51,7 @@ func (p *Parser) B8String(d *string) *Parser {
 	var v uint8
 	return p.Byte(&v).NString(int(v), d)
 }
+
+func ntohq(x uint64) uint64 {
+	return ((uint64(ntohl(uint32((x) >> 32)))) | (uint64(ntohl(uint32(x))) << 32))
+}
