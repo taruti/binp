@@ -2,6 +2,8 @@
 
 package binp
 
+import "encoding/binary"
+
 // Printer type. Don't touch the internals.
 type Printer struct {
 	w []byte
@@ -149,13 +151,13 @@ func (p *Printer) LenStart(l *Len) *Printer {
 
 // Add a 16 bit field at the current location that will be filled with the length.
 func (p *Printer) LenN16(l *Len) *Printer {
-	l.ls = append(l.ls, ls{uint32(len(p.w)), 2})
+	l.ls = append(l.ls, ls{uint32(len(p.w)), 2 | lenMaskNative})
 	return p.N16(0)
 }
 
 // Add a 32 bit field at the current location that will be filled with the length.
 func (p *Printer) LenN32(l *Len) *Printer {
-	l.ls = append(l.ls, ls{uint32(len(p.w)), 4})
+	l.ls = append(l.ls, ls{uint32(len(p.w)), 4 | lenMaskNative})
 	return p.N32(0)
 }
 
@@ -172,10 +174,14 @@ func (p *Printer) LenDone(l *Len) *Printer {
 	plen := len(p.w) - l.start
 	for _, ls := range l.ls {
 		switch ls.size {
-		case 2:
+		case 2 | lenMaskNative:
 			NativeEndian.PutUint16(p.w[ls.offset:], uint16(plen))
-		case 4:
+		case 4 | lenMaskNative:
 			NativeEndian.PutUint32(p.w[ls.offset:], uint32(plen))
+		case 2 | lenMaskBE:
+			binary.BigEndian.PutUint16(p.w[ls.offset:], uint16(plen))
+		case 4 | lenMaskBE:
+			binary.BigEndian.PutUint32(p.w[ls.offset:], uint32(plen))
 		}
 	}
 	return p
@@ -191,3 +197,8 @@ type ls struct {
 	offset uint32
 	size   uint32
 }
+
+const (
+	lenMaskNative = 1 << 30
+	lenMaskBE     = 1 << 31
+)
