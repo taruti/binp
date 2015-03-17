@@ -2,6 +2,9 @@ package binp
 
 // Parse 4 native endian bytes from the buffer.
 func (p *Parser) N32(d *uint32) *Parser {
+	if p == nil || len(p.r) < p.off+4 {
+		return nil
+	}
 	*d = NativeEndian.Uint32(p.r[p.off:])
 	p.off += 4
 	return p
@@ -9,6 +12,9 @@ func (p *Parser) N32(d *uint32) *Parser {
 
 // Parse 8 native endian bytes from the buffer.
 func (p *Parser) N64(d *uint64) *Parser {
+	if p == nil || len(p.r) < p.off+8 {
+		return nil
+	}
 	*d = NativeEndian.Uint64(p.r[p.off:])
 	p.off += 8
 	return p
@@ -16,6 +22,9 @@ func (p *Parser) N64(d *uint64) *Parser {
 
 // Parse 2 native endian bytes from the buffer.
 func (p *Parser) N16(d *uint16) *Parser {
+	if p == nil || len(p.r) < p.off+2 {
+		return nil
+	}
 	*d = NativeEndian.Uint16(p.r[p.off:])
 	p.off += 2
 	return p
@@ -29,8 +38,8 @@ func (p *Parser) N32Bytes(d *[]byte) *Parser {
 
 // Parse n bytes from the buffer to a string pointer.
 func (p *Parser) NString(n int, d *string) *Parser {
-	if n > len(p.r[p.off:]) {
-		panic("binparser: overflowing length")
+	if p == nil || n > len(p.r[p.off:]) {
+		return nil
 	}
 	bs := p.r[p.off : p.off+n]
 	*d = string(bs)

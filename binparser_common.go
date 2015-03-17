@@ -48,6 +48,9 @@ func NewParser(b []byte) *Parser {
 
 // Parse a byte from the buffer.
 func (p *Parser) Byte(d *byte) *Parser {
+	if p == nil || len(p.r) < p.off+1 {
+		return nil
+	}
 	*d = p.r[p.off]
 	p.off++
 	return p
@@ -55,6 +58,9 @@ func (p *Parser) Byte(d *byte) *Parser {
 
 // Parse a byte from the buffer, synonym for .Byte.
 func (p *Parser) B8(d *byte) *Parser {
+	if p == nil || len(p.r) < p.off+1 {
+		return nil
+	}
 	*d = p.r[p.off]
 	p.off++
 	return p
@@ -62,6 +68,9 @@ func (p *Parser) B8(d *byte) *Parser {
 
 // Parse a byte from the buffer, synonym for .Byte.
 func (p *Parser) N8(d *byte) *Parser {
+	if p == nil || len(p.r) < p.off+1 {
+		return nil
+	}
 	*d = p.r[p.off]
 	p.off++
 	return p
@@ -69,8 +78,8 @@ func (p *Parser) N8(d *byte) *Parser {
 
 // Parse n bytes from the buffer and copy to a []byte pointer that is allocated.
 func (p *Parser) NBytes(n int, d *[]byte) *Parser {
-	if n > len(p.r[p.off:]) {
-		panic("binparser: overflowing length")
+	if p == nil || n > len(p.r[p.off:]) {
+		return nil
 	}
 	*d = make([]byte, n)
 	copy(*d, p.r[p.off:])
@@ -80,8 +89,8 @@ func (p *Parser) NBytes(n int, d *[]byte) *Parser {
 
 // Parse n bytes from the buffer and copy to the supplied []byte.
 func (p *Parser) NBytesCopy(n int, d []byte) *Parser {
-	if n > len(p.r[p.off:]) {
-		panic("binparser: overflowing length")
+	if p == nil || n > len(p.r[p.off:]) {
+		return nil
 	}
 	copy(d, p.r[p.off:p.off+n])
 	p.off += n
@@ -90,8 +99,8 @@ func (p *Parser) NBytesCopy(n int, d []byte) *Parser {
 
 // Parse n bytes from the buffer to a []byte pointer that refers to the parser internal buffer.
 func (p *Parser) NBytesPeek(n int, d *[]byte) *Parser {
-	if n > len(p.r[p.off:]) {
-		panic("binparser: overflowing length")
+	if p == nil || n > len(p.r[p.off:]) {
+		return nil
 	}
 	*d = p.r[p.off : p.off+n]
 	p.off += n
@@ -100,11 +109,13 @@ func (p *Parser) NBytesPeek(n int, d *[]byte) *Parser {
 
 // Ensure the input is aligned possibly skipping bytes.
 func (p *Parser) Align(n int) *Parser {
-	r := p.off % n
-	if r == 0 {
-		return p
+	if p == nil {
+		return nil
 	}
-	p.off += n - r
+	r := p.off % n
+	if r != 0 {
+		p.off += n - r
+	}
 	return p
 }
 
@@ -116,6 +127,9 @@ func (p *Parser) Skip(n int) *Parser {
 
 // Parse a null terminated string.
 func (p *Parser) String0(d *string) *Parser {
+	if p == nil {
+		return nil
+	}
 	for i, ch := range p.r[p.off:] {
 		if ch == 0 {
 			p.NString(i, d)
@@ -127,11 +141,14 @@ func (p *Parser) String0(d *string) *Parser {
 }
 
 // Check that we are at the end of input.
-func (p *Parser) End() {
-	if p.off != len(p.r) {
-		panic("binparser: overlong packet")
+func (p *Parser) End() error {
+	if p == nil || p.off != len(p.r) {
+		return eparse
 	}
+	return nil
 }
+
+var eparse = errors.New("binparser invalid input")
 
 // Check that we are at the end of input.
 func (p *Parser) AtEnd() bool {

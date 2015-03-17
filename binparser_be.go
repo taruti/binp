@@ -4,6 +4,9 @@ import "encoding/binary"
 
 // Parse 4 bigendian bytes from the buffer.
 func (p *Parser) B32(d *uint32) *Parser {
+	if p == nil || len(p.r) < p.off+4 {
+		return nil
+	}
 	*d = binary.BigEndian.Uint32(p.r[p.off:])
 	p.off += 4
 	return p
@@ -11,6 +14,9 @@ func (p *Parser) B32(d *uint32) *Parser {
 
 // Parse 8 bigendian bytes from the buffer.
 func (p *Parser) B64(d *uint64) *Parser {
+	if p == nil || len(p.r) < p.off+8 {
+		return nil
+	}
 	*d = binary.BigEndian.Uint64(p.r[p.off:])
 	p.off += 8
 	return p
@@ -18,6 +24,9 @@ func (p *Parser) B64(d *uint64) *Parser {
 
 // Parse 2 bigendian bytes from the buffer.
 func (p *Parser) B16(d *uint16) *Parser {
+	if p == nil || len(p.r) < p.off+2 {
+		return nil
+	}
 	*d = binary.BigEndian.Uint16(p.r[p.off:])
 	p.off += 2
 	return p
