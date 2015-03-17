@@ -1,19 +1,5 @@
 package binp
 
-// Parse a byte from the buffer, synonym for .Byte.
-func (p *Parser) B8(d *byte) *Parser {
-	*d = p.r[p.off]
-	p.off++
-	return p
-}
-
-// Parse a byte from the buffer, synonym for .Byte.
-func (p *Parser) N8(d *byte) *Parser {
-	*d = p.r[p.off]
-	p.off++
-	return p
-}
-
 // Parse 4 native endian bytes from the buffer.
 func (p *Parser) N32(d *uint32) *Parser {
 	*d = NativeEndian.Uint32(p.r[p.off:])

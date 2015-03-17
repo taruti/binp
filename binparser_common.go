@@ -53,6 +53,20 @@ func (p *Parser) Byte(d *byte) *Parser {
 	return p
 }
 
+// Parse a byte from the buffer, synonym for .Byte.
+func (p *Parser) B8(d *byte) *Parser {
+	*d = p.r[p.off]
+	p.off++
+	return p
+}
+
+// Parse a byte from the buffer, synonym for .Byte.
+func (p *Parser) N8(d *byte) *Parser {
+	*d = p.r[p.off]
+	p.off++
+	return p
+}
+
 // Parse n bytes from the buffer and copy to a []byte pointer that is allocated.
 func (p *Parser) NBytes(n int, d *[]byte) *Parser {
 	if n > len(p.r[p.off:]) {
