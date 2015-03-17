@@ -3,10 +3,6 @@ package binp
 import "testing"
 
 func TestParserBE(t *testing.T) {
-	if ntohs(0x1234) != 0x3412 {
-		t.Fatal("ntohs")
-	}
-
 	var by byte
 	NewParser([]byte{11}).Byte(&by).End()
 	if by != 11 {
