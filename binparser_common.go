@@ -1,44 +1,11 @@
 package binp
 
-import (
-	"errors"
-	"fmt"
-)
+import "errors"
 
 // Parser type. Don't touch the internals.
 type Parser struct {
 	r   []byte
 	off int
-}
-
-// Catch a panic into an error.
-func Catch(f func()) (err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			var ok bool
-			err, ok = r.(error)
-			if !ok {
-				err = errors.New(fmt.Sprint(r))
-			}
-		}
-	}()
-	f()
-	return
-}
-
-// Catch a panic into an error.
-func CatchErr(f func() error) (err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			var ok bool
-			err, ok = r.(error)
-			if !ok {
-				err = errors.New(fmt.Sprint(r))
-			}
-		}
-	}()
-	err = f()
-	return
 }
 
 // Create a new parser with the given buffer. Panics on error.
